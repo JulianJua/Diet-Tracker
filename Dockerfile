@@ -2,17 +2,19 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN apk add --no-cache python3 make g++ sqlite-dev \
+    && npm ci
 COPY . .
-RUN npm run build
+RUN npm rebuild sqlite3 --build-from-source \
+    && npm run build \
+    && npm prune --omit=dev
 
 # --- Runtime stage ---
 FROM node:20-alpine
 WORKDIR /app
 ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY --from=build /app .
+RUN apk add --no-cache sqlite-libs
+COPY --from=build /app /app
 
 # Configure default envs (can be overridden)
 ENV PORT=5000
