@@ -3,7 +3,7 @@ services:
     name: diet-tracker
     env: node
     plan: starter
-    repo: https://example.com/your/repo
+    repo: https://github.com/JulianJua/Diet-Tracker
     buildCommand: npm install && npm run build
     startCommand: node server/index.js
     autoDeploy: true
