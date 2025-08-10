@@ -2,21 +2,13 @@ services:
   - type: web
     name: diet-tracker
     env: docker
-    plan: starter
+    plan: free
     repo: https://github.com/JulianJua/Diet-Tracker
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DATABASE_PATH
-        value: /data/database.sqlite
-      - key: UPLOADS_DIR
-        value: /data/uploads
       - key: JWT_SECRET
         generateValue: true
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
 
 

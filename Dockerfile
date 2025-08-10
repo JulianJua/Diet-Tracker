@@ -16,6 +16,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN apk add --no-cache sqlite-libs
 COPY --from=build /app /app
+RUN chown -R node:node /app
+USER node
 
 # Configure default envs (can be overridden)
 ENV PORT=5000
