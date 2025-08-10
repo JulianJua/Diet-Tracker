@@ -1,20 +1,24 @@
 # --- Build stage: build React app ---
-FROM node:20-alpine AS build
+FROM node:20-bookworm-slim AS build
 WORKDIR /app
 COPY package*.json ./
-# Install only what's needed for native builds (node-gyp)
-RUN apk add --no-cache python3 make g++ sqlite-dev \
-    && npm ci
+# Install build tools and SQLite headers for any native deps (Debian)
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+     build-essential python3 ca-certificates libsqlite3-dev \
+  && rm -rf /var/lib/apt/lists/* \
+  && npm ci
 COPY . .
-RUN npm rebuild sqlite3 --build-from-source \
-    && npm run build \
-    && npm prune --omit=dev
+RUN npm run build \
+  && npm prune --omit=dev
 
 # --- Runtime stage ---
-FROM node:20-alpine
+FROM node:20-bookworm-slim
 WORKDIR /app
 ENV NODE_ENV=production
-RUN apk add --no-cache sqlite-libs
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends sqlite3 libsqlite3-0 \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app /app
 RUN chown -R node:node /app
 USER node

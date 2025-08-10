@@ -10,8 +10,7 @@
     "eject": "react-scripts eject",
     "server": "node server/index.js",
     "dev": "concurrently \"npm run server\" \"npm start\"",
-    "start:prod": "node server/index.js",
-    "postinstall": "npm rebuild sqlite3 --build-from-source"
+    "start:prod": "node server/index.js"
   },
   "dependencies": {
     "react": "^18.2.0",
