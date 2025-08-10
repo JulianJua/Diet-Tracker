@@ -2,7 +2,8 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN apk add --no-cache python3 py3-pip py3-setuptools py3-distutils make g++ sqlite-dev \
+# Install only what's needed for native builds (node-gyp)
+RUN apk add --no-cache python3 make g++ sqlite-dev \
     && npm ci
 COPY . .
 RUN npm rebuild sqlite3 --build-from-source \
