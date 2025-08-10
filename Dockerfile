@@ -5,9 +5,9 @@ COPY package*.json ./
 # Install build tools and SQLite headers for any native deps (Debian)
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-     build-essential python3 ca-certificates libsqlite3-dev \
+     build-essential python3 ca-certificates \
   && rm -rf /var/lib/apt/lists/* \
-  && npm ci
+  && npm install --omit=dev
 COPY . .
 RUN npm run build \
   && npm prune --omit=dev
